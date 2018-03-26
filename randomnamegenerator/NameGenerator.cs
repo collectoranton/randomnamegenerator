@@ -11,6 +11,7 @@ namespace randomnamegenerator
 
     public class NameGenerator
     {
+        TripleDictionary tripleDictionary = new TripleDictionary();
         Random random = new Random();
         bool isFirstCharacter = true;
         bool lastCharacterWasVowel;
@@ -43,7 +44,7 @@ namespace randomnamegenerator
         {
             while (true)
             {
-                switch (random.Next(0, 9))
+                switch (random.Next(0, 10))
                 {
                     case 0:
                     case 1:
@@ -66,10 +67,23 @@ namespace randomnamegenerator
                         if (!lastCharacterWasVowel && charactersLeft > 1)
                             return GenerateDoubleVowel(isFirstCharacter);
                         break;
+                    case 9:
+                        if (!isFirstCharacter && charactersLeft > 2)
+                            return GetRandomTriple();
+                        break;
                     default:
                         return null;
                 }
             }
+        }
+
+        string GetRandomTriple()
+        {
+            var triple = tripleDictionary.GetTriple(!lastCharacterWasVowel);
+
+            lastCharacterWasVowel = triple.LastCharacterIsVowel;
+
+            return triple.TripleString;
         }
 
         string GenerateDoubleVowel(bool isFirstCharacter)
@@ -96,13 +110,13 @@ namespace randomnamegenerator
         string GenerateConsonant()
         {
             lastCharacterWasVowel = false;
-            return FormattedForFirstCharacter(GenerateCharacter("qwrtpsdfghjklzxcvbnm"));
+            return FormattedForFirstCharacter(GenerateCharacter(Letters.Consonants));
         }
 
         string GenerateVowel()
         {
             lastCharacterWasVowel = true;
-            return FormattedForFirstCharacter(GenerateCharacter("eyuioa"));
+            return FormattedForFirstCharacter(GenerateCharacter(Letters.Vowels));
         }
 
         string FormattedForFirstCharacter(string character)
