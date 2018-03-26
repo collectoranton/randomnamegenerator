@@ -18,7 +18,7 @@ namespace randomnamegenerator
 
         public string GenerateRandomName(int maxLength = 7, int minLength = 3)
         {
-            if (minLength < 2 || maxLength < 2)
+            if (minLength < 2)
                 throw new ArgumentException("Name can not be shorter than 2 letters.");
             if (maxLength < minLength)
                 throw new ArgumentException("minLength can not be less than maxLength.");
@@ -32,26 +32,14 @@ namespace randomnamegenerator
             string name = "";
 
             while (name.Length < length)
-            {
-                if (isFirstCharacter)
-                {
-                    name = GenerateNameCharacter(true, false);
-                    continue;
-                }
-                if (IsLastCharacter(name.Length, maxLength))
-                    name += GenerateNameCharacter(false, true);
-                else
-                    name += GenerateNameCharacter(false, false);
-            }
+                name += GenerateNameCharacter(length - name.Length);
 
             isFirstCharacter = true;
 
             return name;
         }
 
-        bool IsLastCharacter(int nameLength, int maxLength) => (maxLength - nameLength == 1) ? true : false;
-
-        string GenerateNameCharacter(bool isFirstCharacter, bool isLastCharacter)
+        string GenerateNameCharacter(int charactersLeft)
         {
             while (true)
             {
@@ -60,32 +48,22 @@ namespace randomnamegenerator
                     case 0:
                     case 1:
                     case 2:
-                        if (isFirstCharacter)
-                        {
-                            this.isFirstCharacter = false;
-                            return GenerateVowel().ToString().ToUpper();
-                        }
-                        if (!lastCharacterWasVowel && !isFirstCharacter)
-                            return GenerateVowel().ToString();
+                        if (!lastCharacterWasVowel)
+                            return GenerateVowel();
                         break;
                     case 3:
                     case 4:
                     case 5:
-                        if (isFirstCharacter)
-                        {
-                            this.isFirstCharacter = false;
-                            return GenerateConsonant().ToString().ToUpper();
-                        }
-                        if (lastCharacterWasVowel && !isFirstCharacter)
-                            return GenerateConsonant().ToString();
+                        if (lastCharacterWasVowel)
+                            return GenerateConsonant();
                         break;
                     case 6:
                     case 7:
-                        if (lastCharacterWasVowel && !isFirstCharacter && !isLastCharacter)
+                        if (lastCharacterWasVowel && !isFirstCharacter && charactersLeft > 1)
                             return GenerateDoubleConsonant();
                         break;
                     case 8:
-                        if (!lastCharacterWasVowel && !isLastCharacter)
+                        if (!lastCharacterWasVowel && charactersLeft > 1)
                             return GenerateDoubleVowel(isFirstCharacter);
                         break;
                     default:
@@ -115,18 +93,28 @@ namespace randomnamegenerator
             return doubleConsonant;
         }
 
-        char GenerateConsonant()
+        string GenerateConsonant()
         {
             lastCharacterWasVowel = false;
-            return GenerateCharacter("qwrtpsdfghjklzxcvbnm");
+            return FormattedForFirstCharacter(GenerateCharacter("qwrtpsdfghjklzxcvbnm"));
         }
 
-        char GenerateVowel()
+        string GenerateVowel()
         {
             lastCharacterWasVowel = true;
-            return GenerateCharacter("eyuioa");
+            return FormattedForFirstCharacter(GenerateCharacter("eyuioa"));
         }
 
-        char GenerateCharacter(string pattern) => pattern[random.Next(0, pattern.Length)];
+        string FormattedForFirstCharacter(string character)
+        {
+            if (isFirstCharacter)
+            {
+                isFirstCharacter = false;
+                return character.ToUpper();
+            }
+            return character;
+        }
+
+        string GenerateCharacter(string pattern) => pattern[random.Next(0, pattern.Length)].ToString();
     }
 }

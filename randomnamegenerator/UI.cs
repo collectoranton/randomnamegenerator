@@ -11,7 +11,7 @@ namespace randomnamegenerator
             var minLength = GetMinLengthFromUser();
             var maxLength = GetMaxLengthFromUser();
             var quantity = GetNumberOfNamesFromUser();
-            var rule = GetLanguageRuleFromUser();
+            //var rule = GetLanguageRuleFromUser();
 
             var nameGenerator = new NameGenerator();
             var names = new List<string>();
