@@ -4,14 +4,11 @@ using System.Text;
 
 namespace randomnamegenerator
 {
-    public struct Letters
+    public class Alphabet
     {
-        public const string EnglishAlphabet = "eyuioaqwrtpsdfghjklzxcvbnm";
+        public const string English = "eyuioaqwrtpsdfghjklzxcvbnm";
         public const string Vowels = "eyuioa";
         public const string Consonants = "qwrtpsdfghjklzxcvbnm";
-    }
-
-    class Dictionary
-    {
+        public const string Separators = " ,.;:!?";
     }
 }

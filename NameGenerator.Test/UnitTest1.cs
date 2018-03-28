@@ -35,10 +35,10 @@ namespace NameGenerator.Test
         }
 
         [TestMethod]
-        public void Max3VowelsInARow() => Assert.IsTrue(MaxLettersInARowFromPattern(3, Letters.Vowels));
+        public void Max3VowelsInARow() => Assert.IsTrue(MaxLettersInARowFromPattern(3, Alphabet.Vowels));
 
         [TestMethod]
-        public void Max3ConsonantsInARow() => Assert.IsTrue(MaxLettersInARowFromPattern(3, Letters.Consonants));
+        public void Max3ConsonantsInARow() => Assert.IsTrue(MaxLettersInARowFromPattern(3, Alphabet.Consonants));
 
         [TestMethod]
         public void NamesAreWithinRange()

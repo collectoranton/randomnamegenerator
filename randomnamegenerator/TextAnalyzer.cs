@@ -4,23 +4,16 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 namespace randomnamegenerator
 {
     class TextAnalyzer
     {
-        StreamReader streamReader;
-        StreamWriter streamWriter;
-
-        public TextAnalyzer()
-        {
-
-        }
-
         public void GetChunksFromText(int chunkLength, string pattern, string inputPath,string outputPath)
         {
-            streamReader = new StreamReader(inputPath);
-            streamWriter = new StreamWriter(outputPath);
+            var streamReader = new StreamReader(inputPath);
+            var streamWriter = new StreamWriter(outputPath);
             StringBuilder stringBuilder = new StringBuilder(chunkLength);
 
             while (!streamReader.EndOfStream)
@@ -49,16 +42,42 @@ namespace randomnamegenerator
 
         public void TrainLetterTreeFromFile(string inputPath, string outputPath)
         {
-            streamReader = new StreamReader(inputPath);
-
+            var wordList = WordListFromFile(inputPath);
             Letter root = new Letter();
 
-            root
+            UpdateTreeWithWordList(root, wordList);
 
+            SaveTreeToFile(root, outputPath);
+        }
+
+        void SaveTreeToFile(Letter root, string outputPath)
+        {
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None);
+
             formatter.Serialize(stream, root);
+
             stream.Close();
+        }
+
+        void UpdateTreeWithWordList(Letter root, List<string> wordList)
+        {
+            foreach (var word in wordList)
+                root.Update(word);
+        }
+
+        List<string> WordListFromFile(string path) => File.ReadAllText(path).Split(Alphabet.Separators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+
+        List<string> WordListCleanUp(List<string> wordList, string allowedWordCharacters)
+        {
+            var rejectedList = new List<string>();
+
+            for (int i = 0; i < wordList.Count; i++)
+            {
+                
+            }
+
+            throw new NotImplementedException();
         }
     }
 }

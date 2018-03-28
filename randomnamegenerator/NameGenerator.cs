@@ -22,6 +22,15 @@ namespace randomnamegenerator
         bool lastCharacterWasVowel;
         int length;
 
+
+
+        public string GenerateNameFromTree()
+        {
+            throw new NotImplementedException();
+        }
+
+
+
         public string GenerateRandomName(int maxLength = 7, int minLength = 3)
         {
             if (minLength < 2)
@@ -115,13 +124,13 @@ namespace randomnamegenerator
         string GenerateConsonant()
         {
             lastCharacterWasVowel = false;
-            return FormattedForFirstCharacter(GenerateCharacter(Letters.Consonants));
+            return FormattedForFirstCharacter(GenerateCharacter(Alphabet.Consonants));
         }
 
         string GenerateVowel()
         {
             lastCharacterWasVowel = true;
-            return FormattedForFirstCharacter(GenerateCharacter(Letters.Vowels));
+            return FormattedForFirstCharacter(GenerateCharacter(Alphabet.Vowels));
         }
 
         string FormattedForFirstCharacter(string character)

@@ -7,12 +7,14 @@ namespace randomnamegenerator
     {
         static void Main(string[] args)
         {
-            //var textAnalyzer = new TextAnalyzer();
+            var textAnalyzer = new TextAnalyzer();
             //var path = @"C:\Project\CsharpExcercises\randomnamegenerator\randomnamegenerator\";
+            var path = @"C:\Users\Anton\Source\Repos\randomnamegenerator\randomnamegenerator\";
 
+            textAnalyzer.TrainLetterTreeFromFile(path + "text.txt", path + "tree.bin");
             //textAnalyzer.GetChunksFromText(3, Letters.EnglishAlphabet, path + "text.txt", path + "out.txt");
 
-            UI.Run();
+            //UI.Run();
 
             //var nameGenerator = new NameGenerator();
             //var names = new List<string>();

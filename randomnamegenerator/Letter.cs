@@ -24,11 +24,12 @@ namespace randomnamegenerator
             IsLast = true;
         }
 
-        public Letter(char character, char parent, int level, string initiationString)
+        public Letter(char character, char parent, int level, int levelTotal, string initiationString)
         {
             Character = character;
             Parent = parent;
             Level = level;
+            LevelTotal = levelTotal;
 
             if (initiationString.Length == 1)
                 IsLast = true;
@@ -57,10 +58,12 @@ namespace randomnamegenerator
 
         public void UpdateLevelTotal(int levelTotal)
         {
-            if (LevelTotal == levelTotal - 1)
+            if (LevelTotal == levelTotal || LevelTotal == levelTotal - 1)
                 LevelTotal = levelTotal;
             else
                 throw new Exception("Level total error");
+
+
         }
 
         void UpdateChildren(string updateString)
@@ -77,8 +80,7 @@ namespace randomnamegenerator
 
         void InitializeChildren(string initiationString)
         {
-            children = new List<Letter>();
-            children.Add(CreateNewChild(initiationString));
+            children = new List<Letter> { CreateNewChild(initiationString) };
             UpdateChildrensLevelTotal();
         }
 
@@ -87,8 +89,9 @@ namespace randomnamegenerator
             var character = GetFirstCharacter(initiationString);
             var parent = Character;
             var level = Level + 1;
+            var levelTotal = (children == null) ? 1 : children.Count;
             var _initiationString = RestOfString(initiationString);
-            return new Letter(character, parent, level, _initiationString);
+            return new Letter(character, parent, level, levelTotal, _initiationString);
         }
 
         void UpdateChildrensLevelTotal()
