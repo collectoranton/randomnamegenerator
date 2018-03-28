@@ -28,7 +28,7 @@ namespace randomnamegenerator
                 var stream = streamReader.ReadLine();
 
                 if (stream.Length != 3)
-                    throw new Exception("Triple not 3 characters");
+                    throw new Exception("Triple in dictionary not 3 characters");
 
                 AddTriple(stream);
             }

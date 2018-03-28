@@ -10,7 +10,7 @@ namespace randomnamegenerator
             //var textAnalyzer = new TextAnalyzer();
             //var path = @"C:\Project\CsharpExcercises\randomnamegenerator\randomnamegenerator\";
 
-            //textAnalyzer.GetChunksFromText(2, Letters.Vowels, path + "text.txt", path + "out.txt");
+            //textAnalyzer.GetChunksFromText(3, Letters.EnglishAlphabet, path + "text.txt", path + "out.txt");
 
             UI.Run();
 
@@ -27,12 +27,18 @@ namespace randomnamegenerator
             //for (int i = 0; i < 10000; i++)
             //{
             //    //Console.WriteLine(nameGenerator.GenerateRandomName());
-            //    names.Add(nameGenerator.GenerateRandomName(2, 2));
+            //    names.Add(nameGenerator.GenerateRandomName(7, 7));
             //}
 
-            //foreach (var item in names)
+            //foreach (var name in names)
             //{
-            //    if ("eyuioaEYUIOA".Contains(item[0].ToString()))
+            //    var hit = false;
+            //    foreach (var character in name)
+            //    {
+            //        if ("*".Contains(character.ToString()))
+            //            hit = true;   
+            //    }
+            //    if (hit)
             //        counter++;
             //}
 

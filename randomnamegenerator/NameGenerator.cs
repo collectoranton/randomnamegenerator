@@ -6,7 +6,12 @@ namespace randomnamegenerator
 {
     enum LanguageRule
     {
-        Random
+        Random,
+        RandomOnlySingles,
+        RandomOnlySingleVowels,
+        RandomOnlySingleConsonants,
+        RandomNoTriples,
+        Custom
     }
 
     public class NameGenerator

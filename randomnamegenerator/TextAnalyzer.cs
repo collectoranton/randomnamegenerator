@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace randomnamegenerator
 {
     class TextAnalyzer
     {
-        string path = @"C:\Project\CsharpExcercises\randomnamegenerator\randomnamegenerator\text.txt";
         StreamReader streamReader;
         StreamWriter streamWriter;
 
@@ -44,6 +45,20 @@ namespace randomnamegenerator
 
             streamReader.Close();
             streamWriter.Close();
+        }
+
+        public void TrainLetterTreeFromFile(string inputPath, string outputPath)
+        {
+            streamReader = new StreamReader(inputPath);
+
+            Letter root = new Letter();
+
+            root
+
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, root);
+            stream.Close();
         }
     }
 }
