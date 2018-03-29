@@ -13,9 +13,8 @@ namespace randomnamegenerator
         int indexVowels = 0;
         int indexConsonants = 0;
 
-        public TripleDictionary()
+        public TripleDictionary(string path)
         {
-            var path = @"C:\Project\CsharpExcercises\randomnamegenerator\randomnamegenerator\out.txt";
             ImportDirectory(path);
         }
 

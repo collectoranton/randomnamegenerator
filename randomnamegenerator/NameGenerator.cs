@@ -16,12 +16,23 @@ namespace randomnamegenerator
 
     public class NameGenerator
     {
-        TripleDictionary tripleDictionary = new TripleDictionary();
+        TripleDictionary tripleDictionary;
         Random random = new Random();
         bool isFirstCharacter = true;
         bool lastCharacterWasVowel;
+        bool useTriples;
         int length;
 
+        public NameGenerator()
+        {
+
+        }
+
+        public NameGenerator(string tripleDictionaryPath)
+        {
+            tripleDictionary = new TripleDictionary(tripleDictionaryPath);
+            useTriples = true;
+        }
 
 
         public string GenerateNameFromTree()
@@ -82,7 +93,7 @@ namespace randomnamegenerator
                             return GenerateDoubleVowel(isFirstCharacter);
                         break;
                     case 9:
-                        if (!isFirstCharacter && charactersLeft > 2)
+                        if (useTriples && !isFirstCharacter && charactersLeft > 2)
                             return GetRandomTriple();
                         break;
                     default:

@@ -10,7 +10,7 @@ namespace randomnamegenerator
 {
     class TextAnalyzer
     {
-        public void GetChunksFromText(int chunkLength, string pattern, string inputPath,string outputPath)
+        public void GetChunksFromText(int chunkLength, string pattern, string inputPath, string outputPath)
         {
             var streamReader = new StreamReader(inputPath);
             var streamWriter = new StreamWriter(outputPath);

@@ -8,12 +8,49 @@ namespace randomnamegenerator
     {
         public static void Run()
         {
+            string tripleDictionaryPath = @"C:\Project\CsharpExcercises\randomnamegenerator\randomnamegenerator\out.txt";
+
+            Console.Write("Use triples? (y/n) ");
+            if (Console.ReadLine() == "y")
+            {
+                Console.Write("Train triple dictionary? (y/n) ");
+                if (Console.ReadLine() == "y")
+                    tripleDictionaryPath = TrainTripleDictionary();
+
+                GenerateRandomName(tripleDictionaryPath, true);
+            }
+            else
+                GenerateRandomName(tripleDictionaryPath, false);
+        }
+
+        private static string TrainTripleDictionary()
+        {
+            Console.Write("Enter file to train from: ");
+            var inputPath = Console.ReadLine();
+
+            Console.Write("Enter file to save to: ");
+            var outputPath = Console.ReadLine();
+
+            var textAnalyzer = new TextAnalyzer();
+            textAnalyzer.GetChunksFromText(3, Alphabet.English, inputPath, outputPath);
+
+            return outputPath;
+        }
+
+        private static void GenerateRandomName(string tripleDictionaryPath, bool useTriples)
+        {
             var minLength = GetMinLengthFromUser();
             var maxLength = GetMaxLengthFromUser();
             var quantity = GetNumberOfNamesFromUser();
             //var rule = GetLanguageRuleFromUser();
 
-            var nameGenerator = new NameGenerator();
+            NameGenerator nameGenerator;
+
+            if (useTriples)
+                nameGenerator = new NameGenerator(tripleDictionaryPath);
+            else
+                nameGenerator = new NameGenerator();
+
             var names = new List<string>();
 
             for (int i = 0; i < quantity; i++)
