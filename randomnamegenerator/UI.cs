@@ -8,7 +8,7 @@ namespace randomnamegenerator
     {
         public static void Run()
         {
-            string tripleDictionaryPath = @"C:\Project\CsharpExcercises\randomnamegenerator\randomnamegenerator\out.txt";
+            string tripleDictionaryPath = @"out.txt";
 
             Console.Write("Use triples? (y/n) ");
             if (Console.ReadLine() == "y")

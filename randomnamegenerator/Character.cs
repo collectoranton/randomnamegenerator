@@ -8,7 +8,7 @@ namespace randomnamegenerator
     class Character
     {
         public char Self { get; private set; }
-        public char Parent { get; private set; }
+        public Character Parent { get; private set; }
         public List<Character> Children { get; set; }
         public int Occurrence { get; set; } = 1;
         public bool IsLast { get; set; }
@@ -19,7 +19,7 @@ namespace randomnamegenerator
         {
         }
 
-        public Character(char self, char parent, int levelTotal = 1, bool isLast = true)
+        public Character(char self, Character parent, int levelTotal = 1, bool isLast = true)
         {
             Self = self;
             Parent = parent;

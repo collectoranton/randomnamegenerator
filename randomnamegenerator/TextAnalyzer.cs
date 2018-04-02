@@ -13,8 +13,8 @@ namespace randomnamegenerator
         public void GetChunksFromText(int chunkLength, string pattern, string inputPath, string outputPath)
         {
             var streamReader = new StreamReader(inputPath);
-            var streamWriter = new StreamWriter(outputPath);
             StringBuilder stringBuilder = new StringBuilder(chunkLength);
+            var list = new List<string>();
 
             while (!streamReader.EndOfStream)
             {
@@ -31,23 +31,51 @@ namespace randomnamegenerator
 
                 if (!streamReader.EndOfStream)
                 {
-                    streamWriter.WriteLine(stringBuilder);
+                    list.Add(stringBuilder.ToString());
                     stringBuilder.Remove(0, 1);
                 }
             }
 
             streamReader.Close();
+            WriteWordListToFile(list, outputPath);
+        }
+
+        void WriteWordListToFile(List<string> wordList, string path)
+        {
+            var streamWriter = new StreamWriter(path);
+
+            foreach (var word in wordList)
+                streamWriter.WriteLine(word);
+
             streamWriter.Close();
+        }
+
+        public Letter GetTreeFromFile(string path)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            var letter = (Letter)formatter.Deserialize(stream);
+
+            stream.Close();
+
+            return letter;
         }
 
         public void TrainLetterTreeFromFile(string inputPath, string outputPath)
         {
-            var wordList = WordListFromFile(inputPath);
-            Letter root = new Letter();
+            var wordList = WordListFromFile(inputPath, Alphabet.Separators);
+            WriteWordListToFile(WordListCleanUp(wordList, Alphabet.English), AppendToFileName(outputPath, "_rejectedList"));
 
+            Letter root = new Letter();
             UpdateTreeWithWordList(root, wordList);
 
             SaveTreeToFile(root, outputPath);
+        }
+
+        string AppendToFileName(string path, string add)
+        {
+            return $"{Path.GetDirectoryName(path)}\\{Path.GetFileNameWithoutExtension(path)}{add}{Path.GetExtension(path)}";
         }
 
         void SaveTreeToFile(Letter root, string outputPath)
@@ -66,18 +94,25 @@ namespace randomnamegenerator
                 root.Update(word);
         }
 
-        List<string> WordListFromFile(string path) => File.ReadAllText(path).Split(Alphabet.Separators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+        List<string> WordListFromFile(string path, string separators) => File.ReadAllText(path).Split(separators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
         List<string> WordListCleanUp(List<string> wordList, string allowedWordCharacters)
         {
-            var rejectedList = new List<string>();
+            var rejectedList = GetListWithNotAllowedWords(wordList, allowedWordCharacters);
 
-            for (int i = 0; i < wordList.Count; i++)
-            {
-                
-            }
+            wordList.RemoveAll(w => rejectedList.Contains(w));
 
-            throw new NotImplementedException();
+            return rejectedList;
+        }
+
+        public List<string> GetListWithNotAllowedWords(List<string> wordList, string allowedWordCharacters)
+        {
+            return wordList.FindAll(w => WordContainsNotAllowedCharacter(w, allowedWordCharacters));
+        }
+
+        bool WordContainsNotAllowedCharacter(string word, string allowedWordCharacters)
+        {
+            return word.ToLower().Any(c => !allowedWordCharacters.Contains(c));
         }
     }
 }

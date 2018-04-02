@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace randomnamegenerator
 {
@@ -7,14 +8,18 @@ namespace randomnamegenerator
     {
         static void Main(string[] args)
         {
+            UI.Run();
+
             //var textAnalyzer = new TextAnalyzer();
             //var path = @"C:\Project\CsharpExcercises\randomnamegenerator\randomnamegenerator\";
-            ////var path = @"C:\Users\Anton\Source\Repos\randomnamegenerator\randomnamegenerator\";
+            //var path = @"C:\Users\Anton\Source\Repos\randomnamegenerator\randomnamegenerator\";
 
-            //textAnalyzer.TrainLetterTreeFromFile(path + "text.txt", path + "tree.bin");
-            ////textAnalyzer.GetChunksFromText(3, Letters.EnglishAlphabet, path + "text.txt", path + "out.txt");
+            //textAnalyzer.TrainLetterTreeFromFile(path + "treetest.txt", path + "tree2.bin");
+            //textAnalyzer.GetChunksFromText(3, Letters.EnglishAlphabet, path + "text.txt", path + "out.txt");
 
-            UI.Run();
+            //var root = textAnalyzer.GetTreeFromFile(path + "tree2.bin");
+
+            //Console.WriteLine(root.GetNextRandomCharacter(5));
 
             //var nameGenerator = new NameGenerator();
             //var names = new List<string>();

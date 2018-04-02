@@ -9,11 +9,12 @@ namespace randomnamegenerator
     class Letter
     {
         List<Letter> children;
+        Random random = new Random();
 
-        int occurrence = 1;
         public char Character { get; private set; }
-        public char Parent { get; private set; }
-        public double Probability { get => occurrence / LevelTotal; }
+        public Letter Parent { get; private set; }
+        public double Probability { get => Occurrence / LevelTotal; }
+        public int Occurrence { get; private set; } = 1;
         public int Level { get; private set; }
         public int LevelTotal { get; private set; }
         public bool IsLast { get; private set; }
@@ -24,7 +25,7 @@ namespace randomnamegenerator
             IsLast = true;
         }
 
-        public Letter(char character, char parent, int level, int levelTotal, string initiationString)
+        public Letter(char character, Letter parent, int level, int levelTotal, string initiationString)
         {
             Character = character;
             Parent = parent;
@@ -42,7 +43,7 @@ namespace randomnamegenerator
 
         public void Update(string updateString)
         {
-            occurrence++;
+            Occurrence++;
 
             if (updateString.Length == 1)
                 return;
@@ -87,7 +88,7 @@ namespace randomnamegenerator
         Letter CreateNewChild(string initiationString)
         {
             var character = GetFirstCharacter(initiationString);
-            var parent = Character;
+            var parent = this;
             var level = Level + 1;
             var levelTotal = (children == null) ? 1 : children.Count;
             var _initiationString = RestOfString(initiationString);
@@ -103,5 +104,35 @@ namespace randomnamegenerator
         char GetFirstCharacter(string inputString) => inputString[0];
 
         string RestOfString(string inputString) => inputString.Substring(1);
+
+
+        string ReturnRandomString(int depth)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetNextRandomCharacter(int index)
+        {
+            if (IsLast || index == 1)
+                return Character.ToString();
+            else
+                return Character + NextRandomChild().GetNextRandomCharacter(index - 1);
+        }
+
+        Letter NextRandomChild()
+        {
+            var chosen = random.Next(1, children.Count + 1);
+            var occurrance = 0;
+
+            foreach (var child in children)
+            {
+                occurrance += child.Occurrence;
+
+                if (occurrance <= chosen)
+                    return child;
+            }
+
+            throw new Exception("Failed to find next random child");
+        }
     }
 }

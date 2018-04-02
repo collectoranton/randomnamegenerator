@@ -58,47 +58,51 @@ namespace randomnamegenerator
             string name = "";
 
             while (name.Length < length)
-                name += GenerateNameCharacter(length - name.Length);
+                name += GenerateNameCharacters(length - name.Length);
 
             isFirstCharacter = true;
 
             return name;
         }
 
-        string GenerateNameCharacter(int charactersLeft)
+        string GenerateNameCharacters(int charactersLeft)
         {
             while (true)
             {
-                switch (random.Next(0, 10))
+                var chance = random.Next(0, 10);
+
+                if (chance <= 2)
                 {
-                    case 0:
-                    case 1:
-                    case 2:
-                        if (!lastCharacterWasVowel)
-                            return GenerateVowel();
-                        break;
-                    case 3:
-                    case 4:
-                    case 5:
-                        if (lastCharacterWasVowel)
-                            return GenerateConsonant();
-                        break;
-                    case 6:
-                    case 7:
-                        if (lastCharacterWasVowel && !isFirstCharacter && charactersLeft > 1)
-                            return GenerateDoubleConsonant();
-                        break;
-                    case 8:
-                        if (!lastCharacterWasVowel && charactersLeft > 1)
-                            return GenerateDoubleVowel(isFirstCharacter);
-                        break;
-                    case 9:
-                        if (useTriples && !isFirstCharacter && charactersLeft > 2)
-                            return GetRandomTriple();
-                        break;
-                    default:
-                        return null;
+                    if (!lastCharacterWasVowel)
+                        return GenerateVowel();
                 }
+
+                else if (chance > 2 && chance <= 5)
+                {
+                    if (lastCharacterWasVowel)
+                        return GenerateConsonant();
+                }
+
+                else if (chance > 5 && chance <= 7)
+                {
+                    if (lastCharacterWasVowel && !isFirstCharacter && charactersLeft > 1)
+                        return GenerateDoubleConsonant();
+                }
+
+                else if (chance == 8)
+                {
+                    if (!lastCharacterWasVowel && charactersLeft > 1)
+                        return GenerateDoubleVowel(isFirstCharacter);
+                }
+
+                else if (chance == 9)
+                {
+                    if (useTriples && !isFirstCharacter && charactersLeft > 2)
+                        return GetRandomTriple();
+                }
+
+                else
+                    return null;
             }
         }
 

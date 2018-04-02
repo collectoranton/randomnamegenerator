@@ -39,12 +39,12 @@ namespace randomnamegenerator
 
         void InitializeChildren(Character character, char initiationChar)
         {
-            character.Children = new List<Character> { new Character(initiationChar, character.Self) };
+            character.Children = new List<Character> { new Character(initiationChar, character) };
         }
 
         void CreateNewChild(Character character, char characterAssign)
         {
-            character.Children.Add(new Character(characterAssign, character.Self, character.Children.Count));
+            character.Children.Add(new Character(characterAssign, character, character.Children.Count));
         }
 
         public void UpdateLevelTotal(Character character, int levelTotal)

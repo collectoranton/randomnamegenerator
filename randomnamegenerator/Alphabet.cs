@@ -10,5 +10,6 @@ namespace randomnamegenerator
         public const string Vowels = "eyuioa";
         public const string Consonants = "qwrtpsdfghjklzxcvbnm";
         public const string Separators = " ,.;:!?";
+        public string Custom { get; set; }
     }
 }
