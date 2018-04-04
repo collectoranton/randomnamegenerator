@@ -8,16 +8,16 @@ namespace randomnamegenerator
     [Serializable]
     class Letter
     {
-        List<Letter> children;
         Random random = new Random();
 
         public char Character { get; private set; }
         public Letter Parent { get; private set; }
-        public double Probability { get => Occurrence / LevelTotal; }
+        public List<Letter> Children { get; set; }
         public int Occurrence { get; private set; } = 1;
         public int Level { get; private set; }
-        public int LevelTotal { get; private set; }
+        public int LevelTotal { get => (Parent != null) ? Parent.Children.Count : 0; }
         public bool IsLast { get; private set; }
+        public double Probability { get => Occurrence / LevelTotal; }
 
         public Letter()
         {
@@ -25,12 +25,11 @@ namespace randomnamegenerator
             IsLast = true;
         }
 
-        public Letter(char character, Letter parent, int level, int levelTotal, string initiationString)
+        public Letter(char character, Letter parent, int level, string initiationString)
         {
             Character = character;
             Parent = parent;
             Level = level;
-            LevelTotal = levelTotal;
 
             if (initiationString.Length == 1)
                 IsLast = true;
@@ -57,51 +56,31 @@ namespace randomnamegenerator
                 UpdateChildren(updateString);
         }
 
-        public void UpdateLevelTotal(int levelTotal)
-        {
-            if (LevelTotal == levelTotal || LevelTotal == levelTotal - 1)
-                LevelTotal = levelTotal;
-            else
-                throw new Exception("Level total error");
-
-
-        }
-
         void UpdateChildren(string updateString)
         {
-            var existingChild = children.FirstOrDefault(child => child.Character == GetFirstCharacter(updateString));
+            var existingChild = Children.FirstOrDefault(child => child.Character == FirstCharacter(updateString));
 
             if (existingChild == null)
-                children.Add(CreateNewChild(updateString));
+                Children.Add(CreateNewChild(updateString));
             else
                 existingChild.Update(RestOfString(updateString));
-
-            UpdateChildrensLevelTotal();
         }
 
         void InitializeChildren(string initiationString)
         {
-            children = new List<Letter> { CreateNewChild(initiationString) };
-            UpdateChildrensLevelTotal();
+            Children = new List<Letter> { CreateNewChild(initiationString) };
         }
 
         Letter CreateNewChild(string initiationString)
         {
-            var character = GetFirstCharacter(initiationString);
+            var character = FirstCharacter(initiationString);
             var parent = this;
             var level = Level + 1;
-            var levelTotal = (children == null) ? 1 : children.Count;
-            var _initiationString = RestOfString(initiationString);
-            return new Letter(character, parent, level, levelTotal, _initiationString);
+            var restOfInitiationString = RestOfString(initiationString);
+            return new Letter(character, parent, level, restOfInitiationString);
         }
 
-        void UpdateChildrensLevelTotal()
-        {
-            foreach (var child in children)
-                child.UpdateLevelTotal(children.Count);
-        }
-
-        char GetFirstCharacter(string inputString) => inputString[0];
+        char FirstCharacter(string inputString) => inputString[0];
 
         string RestOfString(string inputString) => inputString.Substring(1);
 
@@ -121,10 +100,10 @@ namespace randomnamegenerator
 
         Letter NextRandomChild()
         {
-            var chosen = random.Next(1, children.Count + 1);
+            var chosen = random.Next(1, Children.Count + 1);
             var occurrance = 0;
 
-            foreach (var child in children)
+            foreach (var child in Children)
             {
                 occurrance += child.Occurrence;
 

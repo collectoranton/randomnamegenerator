@@ -62,23 +62,18 @@ namespace randomnamegenerator
             return letter;
         }
 
-        public void TrainLetterTreeFromFile(string inputPath, string outputPath)
+        public Letter TrainLetterTreeFromTextFile(string inputPath, string rejectedListPath)
         {
             var wordList = WordListFromFile(inputPath, Alphabet.Separators);
-            WriteWordListToFile(WordListCleanUp(wordList, Alphabet.English), AppendToFileName(outputPath, "_rejectedList"));
+            WriteWordListToFile(WordListCleanUp(wordList, Alphabet.English), rejectedListPath);
 
-            Letter root = new Letter();
-            UpdateTreeWithWordList(root, wordList);
+            Letter tree = new Letter();
+            UpdateTreeWithWordList(tree, wordList);
 
-            SaveTreeToFile(root, outputPath);
+            return tree;
         }
 
-        string AppendToFileName(string path, string add)
-        {
-            return $"{Path.GetDirectoryName(path)}\\{Path.GetFileNameWithoutExtension(path)}{add}{Path.GetExtension(path)}";
-        }
-
-        void SaveTreeToFile(Letter root, string outputPath)
+        public void SaveTreeToFile(Letter root, string outputPath)
         {
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None);
