@@ -8,7 +8,34 @@ namespace randomnamegenerator
     {
         static void Main(string[] args)
         {
-            UI.Run();
+            //UI.Run();
+
+            var stack = new WeightedCharacterStack(3, Alphabet.English);
+            var nameGenerator = new NameGenerator();
+
+            //for (int i = 0; i < 10000; i++)
+            //    stack.Update(nameGenerator.GenerateRandomName(3, 2).ToLower());
+
+            for (int i = 0; i < 100; i++)
+            {
+                stack.UpdateToStackDepth("abzc");
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                foreach (var item in stack.GetLayers()[i].Weights)
+                    Console.WriteLine($"{item.Key} {item.WeightIndex}");
+            }
+
+            Console.WriteLine($"stack.Depth '{stack.Depth}' - stack.CharacterSet '{stack.CharacterSet}'");
+            //Console.WriteLine($"stack.layers[0].Count '{stack.layers[0].Count}'" +
+            //    $"- stack.layers[0].MaxWeight '{stack.layers[0].MaxWeight}'" +
+            //    $"- stack.layers[0].Weights[25].WeightIndex '{stack.layers[0].Weights[25].WeightIndex}'");
+
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine(stack.GetRandomString(3));
+            }
 
             //var textAnalyzer = new TextAnalyzer();
             //var path = @"C:\Project\CsharpExcercises\randomnamegenerator\randomnamegenerator\";

@@ -31,8 +31,6 @@ namespace randomnamegenerator
                 character.Occurrence++;
             else
                 CreateNewChild(character, characterAssign);
-
-            UpdateChildrensLevelTotal(character);
         }
 
         bool CharacterHasChild(Character character, char characterAssign) => character.Children.Any(c => c.Self == characterAssign);
@@ -42,25 +40,9 @@ namespace randomnamegenerator
             character.Children = new List<Character> { new Character(initiationChar, character) };
         }
 
-        void CreateNewChild(Character character, char characterAssign)
+        void CreateNewChild(Character parent, char characterAssign)
         {
-            character.Children.Add(new Character(characterAssign, character, character.Children.Count));
-        }
-
-        public void UpdateLevelTotal(Character character, int levelTotal)
-        {
-            if (character.LevelTotal == levelTotal || character.LevelTotal == levelTotal - 1)
-                character.LevelTotal = levelTotal;
-            else
-                throw new Exception("Level total error");
-
-
-        }
-
-        void UpdateChildrensLevelTotal(Character character)
-        {
-            foreach (var child in character.Children)
-                UpdateLevelTotal(character, character.Children.Count);
+            parent.Children.Add(new Character(characterAssign, parent));
         }
 
         char GetFirstCharacter(string inputString) => inputString[0];
