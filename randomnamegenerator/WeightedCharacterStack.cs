@@ -25,7 +25,7 @@ namespace randomnamegenerator
         public void Update(string updateString)
         {
             if (updateString.Length > Depth)
-                throw new ArgumentException("Update string can not be longer than stack depth", "updateString");
+                throw new ArgumentException("Update string can not be longer than stack depth", nameof(updateString));
 
             UpdateToStackDepth(updateString);
         }
@@ -44,7 +44,7 @@ namespace randomnamegenerator
         public string GetRandomString(int length)
         {
             if (length > Depth)
-                throw new ArgumentException("Length can not be longer than stack depth", "length");
+                throw new ArgumentException("Length can not be longer than stack depth", nameof(length));
 
             var randomString = "";
 

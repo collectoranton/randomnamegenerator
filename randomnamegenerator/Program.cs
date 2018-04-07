@@ -14,7 +14,7 @@ namespace randomnamegenerator
             var nameGenerator = new NameGenerator();
 
             //for (int i = 0; i < 10000; i++)
-            //    stack.Update(nameGenerator.GenerateRandomName(3, 2).ToLower());
+            //stack.Update(nameGenerator.GenerateRandomName(3, 2).ToLower());
 
             for (int i = 0; i < 100; i++)
             {

@@ -33,7 +33,7 @@ namespace randomnamegenerator
             }
 
             if (!afterWeightedCharacterIndex)
-                throw new ArgumentException("No such character in layer", "character");
+                throw new ArgumentException("No such character in layer", nameof(character));
         }
 
         public char GetCharacter(int index)

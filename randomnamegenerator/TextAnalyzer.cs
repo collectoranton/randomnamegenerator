@@ -64,6 +64,8 @@ namespace randomnamegenerator
 
         public Letter TrainLetterTreeFromTextFile(string inputPath, string rejectedListPath)
         {
+            // Regex ^\w+\b$
+
             var wordList = WordListFromFile(inputPath, Alphabet.Separators);
             WriteWordListToFile(WordListCleanUp(wordList, Alphabet.English), rejectedListPath);
 
