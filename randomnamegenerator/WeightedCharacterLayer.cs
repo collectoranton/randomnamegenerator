@@ -7,29 +7,29 @@ namespace randomnamegenerator
 {
     class WeightedCharacterLayer
     {
-        public WeightedCharacter[] Weights { get; private set; }
-        public int Count { get => Weights.Length; }
-        public int MaxWeight { get => Weights[Weights.Length - 1].WeightIndex + 1; }
+        public WeightedCharacter[] _layer;
+        public int Count { get => _layer.Length; }
+        public int MaxWeight { get => _layer[_layer.Length - 1].WeightIndex + 1; }
 
         public WeightedCharacterLayer(string characterSet)
         {
-            Weights = new WeightedCharacter[characterSet.Length];
+            _layer = new WeightedCharacter[characterSet.Length];
 
             for (int i = 0; i < characterSet.Length; i++)
-                Weights[i] = new WeightedCharacter(characterSet[i], i);
+                _layer[i] = new WeightedCharacter(characterSet[i], i);
         }
 
         public void Update(char character)
         {
             var afterWeightedCharacterIndex = false;
 
-            foreach (var weightedCharacter in Weights)
+            foreach (var weightedCharacter in _layer)
             {
                 if (weightedCharacter.Key == character)
                     afterWeightedCharacterIndex = true;
 
                 if (afterWeightedCharacterIndex)
-                    weightedCharacter.Increment();
+                    weightedCharacter.IncrementWeight();
             }
 
             if (!afterWeightedCharacterIndex)
@@ -38,7 +38,7 @@ namespace randomnamegenerator
 
         public char GetCharacter(int index)
         {
-            foreach (var weightedCharacter in Weights)
+            foreach (var weightedCharacter in _layer)
             {
                 if (index <= weightedCharacter.WeightIndex)
                     return weightedCharacter.Key;

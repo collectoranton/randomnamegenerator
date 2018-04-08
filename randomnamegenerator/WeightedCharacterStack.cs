@@ -5,29 +5,53 @@ using System.Linq;
 
 namespace randomnamegenerator
 {
-    class WeightedCharacterStack
+    class WeightedCharacterStack : IUpdatableWithString
     {
-        WeightedCharacterLayer[] layers;
-        Random random = new Random();
+        List<WeightedCharacterLayer> _layers;
+        Dictionary<int, int> _wordLengths;
+        Random _random;
 
-        public int Depth { get => layers.Length; }
-        public string CharacterSet { get; private set; }
+        public int Depth { get => _layers.Count; }
+        public string CharacterSet { get; }
 
-        public WeightedCharacterStack(int depth, string characterSet)
+        public WeightedCharacterStack(string characterSet)
         {
             CharacterSet = characterSet;
-            layers = new WeightedCharacterLayer[depth];
+            _layers = new List<WeightedCharacterLayer>();
+            _wordLengths = new Dictionary<int, int>();
+            _random = new Random();
+        }
 
-            for (int i = 0; i < depth; i++)
-                layers[i] = new WeightedCharacterLayer(characterSet);
+        public WeightedCharacterStack(string characterSet, int setStackDepth)
+            : this(characterSet)
+        {
+            AddLevelsToStack(setStackDepth);
         }
 
         public void Update(string updateString)
         {
             if (updateString.Length > Depth)
-                throw new ArgumentException("Update string can not be longer than stack depth", nameof(updateString));
+                AddLevelsToStack(updateString.Length - Depth);
 
             UpdateToStackDepth(updateString);
+        }
+
+        public void AddLevelsToStack(int quantity)
+        {
+            for (int i = 0; i < quantity; i++)
+                _layers.Add(new WeightedCharacterLayer(CharacterSet));
+        }
+
+        void AddWordLength(int length)
+        {
+
+
+
+            if (_wordLengths.ContainsKey(length))
+                _wordLengths[length]++;
+
+            else
+                _wordLengths.Add(length, 1);
         }
 
         public void UpdateToStackDepth(string updateString)
@@ -36,10 +60,14 @@ namespace randomnamegenerator
                 updateString = updateString.Substring(0, Depth);
 
             for (int i = 0; i < updateString.Length; i++)
-                layers[i].Update(updateString[i]);
+                _layers[i].Update(updateString[i]);
+
+            AddWordLength(updateString.Length);
         }
 
-        public List<WeightedCharacterLayer> GetLayers() => layers.ToList();
+        public Dictionary<int, int> GetWordLengths() => new Dictionary<int, int>(_wordLengths);
+
+        public List<WeightedCharacterLayer> GetLayers() => _layers; // Redo
 
         public string GetRandomString(int length)
         {
@@ -49,9 +77,19 @@ namespace randomnamegenerator
             var randomString = "";
 
             for (int i = 0; i < length; i++)
-                randomString += layers[i].GetCharacter(random.Next(0, layers[i].MaxWeight));
+                randomString += _layers[i].GetCharacter(_random.Next(0, _layers[i].MaxWeight));
 
             return randomString;
+        }
+
+        public string GetProbableLengthString()
+        {
+            throw new NotImplementedException();
+        }
+
+        int GetProbableLength()
+        {
+            throw new NotImplementedException();
         }
     }
 }

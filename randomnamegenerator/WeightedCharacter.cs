@@ -6,7 +6,7 @@ namespace randomnamegenerator
 {
     class WeightedCharacter
     {
-        public char Key { get; private set; }
+        public char Key { get; }
         public int WeightIndex { get; private set; }
 
         public WeightedCharacter(char key, int index)
@@ -15,6 +15,6 @@ namespace randomnamegenerator
             WeightIndex = index;
         }
 
-        public void Increment() => WeightIndex++;
+        public void IncrementWeight() => WeightIndex++;
     }
 }

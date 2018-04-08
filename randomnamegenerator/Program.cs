@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace randomnamegenerator
 {
@@ -10,31 +11,48 @@ namespace randomnamegenerator
         {
             //UI.Run();
 
-            var stack = new WeightedCharacterStack(3, Alphabet.English);
-            var nameGenerator = new NameGenerator();
+            Random random = new Random();
+            var textAnalyzer = new TextAnalyzer();
+            //var nameGenerator = new NameGenerator();
+
+            var stack = textAnalyzer.TrainWeightedCharacterStackFromTextFile(Alphabet.English, "treetest.txt", "rejected.txt");
 
             //for (int i = 0; i < 10000; i++)
             //stack.Update(nameGenerator.GenerateRandomName(3, 2).ToLower());
 
-            for (int i = 0; i < 100; i++)
-            {
-                stack.UpdateToStackDepth("abzc");
-            }
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    stack.Update("abc");
+            //}
 
-            for (int i = 0; i < 3; i++)
-            {
-                foreach (var item in stack.GetLayers()[i].Weights)
-                    Console.WriteLine($"{item.Key} {item.WeightIndex}");
-            }
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    foreach (var item in stack.GetLayers()[i]._layer)
+            //        Console.WriteLine($"{item.Key} {item.WeightIndex}");
+            //}
 
             Console.WriteLine($"stack.Depth '{stack.Depth}' - stack.CharacterSet '{stack.CharacterSet}'");
+            var dictionary = stack.GetWordLengths();
+            var list = dictionary.Keys.ToList();
+            list.Sort();
+
+            foreach (var item in dictionary)
+            {
+                Console.WriteLine($"Length: {item.Key}, Count: {item.Value}");
+            }
+
+            foreach (var item in list)
+            {
+                Console.WriteLine($"Length: {item}, Count: {dictionary[item]}");
+            }
+
             //Console.WriteLine($"stack.layers[0].Count '{stack.layers[0].Count}'" +
             //    $"- stack.layers[0].MaxWeight '{stack.layers[0].MaxWeight}'" +
             //    $"- stack.layers[0].Weights[25].WeightIndex '{stack.layers[0].Weights[25].WeightIndex}'");
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
-                Console.WriteLine(stack.GetRandomString(3));
+                Console.WriteLine(stack.GetRandomString(random.Next(2, stack.Depth + 1)));
             }
 
             //var textAnalyzer = new TextAnalyzer();

@@ -5,9 +5,15 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace randomnamegenerator
 {
+    public interface IUpdatableWithString
+    {
+        void Update(string updateString);
+    }
+
     class TextAnalyzer
     {
         public void GetChunksFromText(int chunkLength, string pattern, string inputPath, string outputPath)
@@ -40,14 +46,17 @@ namespace randomnamegenerator
             WriteWordListToFile(list, outputPath);
         }
 
-        void WriteWordListToFile(List<string> wordList, string path)
+        public WeightedCharacterStack TrainWeightedCharacterStackFromTextFile(string characterSet, string inputPath, string rejectedListPath)
         {
-            var streamWriter = new StreamWriter(path);
+            // Forced lower case
 
-            foreach (var word in wordList)
-                streamWriter.WriteLine(word);
+            var wordList = WordListFromFile(inputPath, Alphabet.English);
+            WriteWordListToFile(WordListCleanUp(wordList, characterSet), rejectedListPath);
 
-            streamWriter.Close();
+            WeightedCharacterStack stack = new WeightedCharacterStack(characterSet);
+            UpdateWithWordList(stack, wordList, true);
+
+            return stack;
         }
 
         public Letter GetTreeFromFile(string path)
@@ -64,13 +73,11 @@ namespace randomnamegenerator
 
         public Letter TrainLetterTreeFromTextFile(string inputPath, string rejectedListPath)
         {
-            // Regex ^\w+\b$
-
-            var wordList = WordListFromFile(inputPath, Alphabet.Separators);
+            var wordList = WordListFromFile(inputPath, Alphabet.English);
             WriteWordListToFile(WordListCleanUp(wordList, Alphabet.English), rejectedListPath);
 
             Letter tree = new Letter();
-            UpdateTreeWithWordList(tree, wordList);
+            UpdateWithWordList(tree, wordList);
 
             return tree;
         }
@@ -78,20 +85,48 @@ namespace randomnamegenerator
         public void SaveTreeToFile(Letter root, string outputPath)
         {
             IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None);
+            Stream stream = new FileStream(outputPath,
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.None);
 
             formatter.Serialize(stream, root);
 
             stream.Close();
         }
 
-        void UpdateTreeWithWordList(Letter root, List<string> wordList)
+        void UpdateWithWordList(IUpdatableWithString root, IEnumerable<string> wordList, bool forceLowerCase = false)
         {
             foreach (var word in wordList)
-                root.Update(word);
+                root.Update((forceLowerCase) ? word.ToLower() : word);
         }
 
-        List<string> WordListFromFile(string path, string separators) => File.ReadAllText(path).Split(separators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+        List<string> WordListFromFile(string path, string characterSet)
+        {
+            return Regex.Matches(File.ReadAllText(path), $"[{characterSet}]{{2,}}", RegexOptions.IgnoreCase)
+                .OfType<Match>()
+                .Select(m => m.Groups[0].Value)
+                .ToList();
+        }
+
+        //List<string> WordListFromFile(string path, string separators)
+        //{
+        //    return File.ReadAllText(path)
+        //        .Split(separators
+        //        .ToCharArray(),
+        //        StringSplitOptions.RemoveEmptyEntries)
+        //        .ToList();
+        //}
+
+        void WriteWordListToFile(List<string> wordList, string path)
+        {
+            var streamWriter = new StreamWriter(path);
+
+            foreach (var word in wordList)
+                streamWriter.WriteLine(word);
+
+            streamWriter.Close();
+        }
 
         List<string> WordListCleanUp(List<string> wordList, string allowedWordCharacters)
         {

@@ -6,7 +6,7 @@ using System.Linq;
 namespace randomnamegenerator
 {
     [Serializable]
-    class Letter
+    class Letter : IUpdatableWithString
     {
         Random random = new Random();
 
