@@ -15,7 +15,7 @@ namespace randomnamegenerator
         public List<Letter> Children { get; set; }
         public int Occurrence { get; private set; } = 1;
         public int Level { get; private set; }
-        public int LevelTotal { get => (Parent != null) ? Parent.Children.Count : 0; }
+        public int LevelTotal { get => (Parent != null) ? Parent.GetChildrenTotalOccurrence() : 0; }
         public bool IsLast { get; private set; }
         public double Probability { get => Occurrence / LevelTotal; }
 
@@ -56,6 +56,16 @@ namespace randomnamegenerator
                 UpdateChildren(updateString);
         }
 
+        public int GetChildrenTotalOccurrence()
+        {
+            var occurrence = 0;
+
+            foreach (var child in Children)
+                occurrence += child.Occurrence;
+
+            return occurrence;
+        }
+
         void UpdateChildren(string updateString)
         {
             var existingChild = Children.FirstOrDefault(child => child.Character == FirstCharacter(updateString));
@@ -94,20 +104,24 @@ namespace randomnamegenerator
         {
             if (IsLast || index == 1)
                 return Character.ToString();
+
+            else if (Character == 0)
+                return NextRandomChild().GetNextRandomCharacter(index);
+
             else
                 return Character + NextRandomChild().GetNextRandomCharacter(index - 1);
         }
 
         Letter NextRandomChild()
         {
-            var chosen = random.Next(1, Children.Count + 1);
-            var occurrance = 0;
+            var chosen = random.Next(1, GetChildrenTotalOccurrence() + 1);
+            var occurrenceIndex = 0;
 
             foreach (var child in Children)
             {
-                occurrance += child.Occurrence;
+                occurrenceIndex += child.Occurrence;
 
-                if (occurrance <= chosen)
+                if (chosen <= occurrenceIndex)
                     return child;
             }
 

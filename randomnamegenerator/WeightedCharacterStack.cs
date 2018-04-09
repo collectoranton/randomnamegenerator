@@ -44,8 +44,7 @@ namespace randomnamegenerator
 
         void AddWordLength(int length)
         {
-
-
+            // Redo?
 
             if (_wordLengths.ContainsKey(length))
                 _wordLengths[length]++;
@@ -82,14 +81,32 @@ namespace randomnamegenerator
             return randomString;
         }
 
-        public string GetProbableLengthString()
-        {
-            throw new NotImplementedException();
-        }
+        public string GetProbableLengthString() => GetRandomString(GetProbableLength());
 
         int GetProbableLength()
         {
-            throw new NotImplementedException();
+            var random = _random.Next(1, GetCountWeightMax());
+            var weightIndex = 0;
+
+            foreach (var wordlength in _wordLengths)
+            {
+                weightIndex += wordlength.Value;
+
+                if (random <= weightIndex)
+                    return wordlength.Key;
+            }
+
+            throw new Exception("Could not get probable word length");
+        }
+
+        int GetCountWeightMax()
+        {
+            var count = 0;
+
+            foreach (var weight in _wordLengths)
+                count += weight.Value;
+
+            return count + 1;
         }
     }
 }

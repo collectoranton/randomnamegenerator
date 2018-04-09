@@ -48,7 +48,7 @@ namespace randomnamegenerator
 
         public WeightedCharacterStack TrainWeightedCharacterStackFromTextFile(string characterSet, string inputPath, string rejectedListPath)
         {
-            // Forced lower case
+            // Force lower case
 
             var wordList = WordListFromFile(inputPath, Alphabet.English);
             WriteWordListToFile(WordListCleanUp(wordList, characterSet), rejectedListPath);
@@ -73,11 +73,13 @@ namespace randomnamegenerator
 
         public Letter TrainLetterTreeFromTextFile(string inputPath, string rejectedListPath)
         {
+            // Force lower case
+
             var wordList = WordListFromFile(inputPath, Alphabet.English);
             WriteWordListToFile(WordListCleanUp(wordList, Alphabet.English), rejectedListPath);
 
             Letter tree = new Letter();
-            UpdateWithWordList(tree, wordList);
+            UpdateWithWordList(tree, wordList, true);
 
             return tree;
         }

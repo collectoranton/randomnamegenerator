@@ -11,11 +11,11 @@ namespace randomnamegenerator
         {
             //UI.Run();
 
-            Random random = new Random();
-            var textAnalyzer = new TextAnalyzer();
+            //Random random = new Random();
+            //var textAnalyzer = new TextAnalyzer();
             //var nameGenerator = new NameGenerator();
 
-            var stack = textAnalyzer.TrainWeightedCharacterStackFromTextFile(Alphabet.English, "treetest.txt", "rejected.txt");
+            //var stack = textAnalyzer.TrainWeightedCharacterStackFromTextFile(Alphabet.English, "treetest.txt", "rejected.txt");
 
             //for (int i = 0; i < 10000; i++)
             //stack.Update(nameGenerator.GenerateRandomName(3, 2).ToLower());
@@ -31,40 +31,47 @@ namespace randomnamegenerator
             //        Console.WriteLine($"{item.Key} {item.WeightIndex}");
             //}
 
-            Console.WriteLine($"stack.Depth '{stack.Depth}' - stack.CharacterSet '{stack.CharacterSet}'");
-            var dictionary = stack.GetWordLengths();
-            var list = dictionary.Keys.ToList();
-            list.Sort();
+            //Console.WriteLine($"stack.Depth '{stack.Depth}' - stack.CharacterSet '{stack.CharacterSet}'");
+            //var dictionary = stack.GetWordLengths();
+            //var list = dictionary.Keys.ToList();
+            //list.Sort();
 
-            foreach (var item in dictionary)
-            {
-                Console.WriteLine($"Length: {item.Key}, Count: {item.Value}");
-            }
+            //foreach (var item in dictionary)
+            //{
+            //    Console.WriteLine($"Length: {item.Key}, Count: {item.Value}");
+            //}
 
-            foreach (var item in list)
-            {
-                Console.WriteLine($"Length: {item}, Count: {dictionary[item]}");
-            }
+            //foreach (var item in list)
+            //{
+            //    Console.WriteLine($"Length: {item}, Count: {dictionary[item]}");
+            //}
 
             //Console.WriteLine($"stack.layers[0].Count '{stack.layers[0].Count}'" +
             //    $"- stack.layers[0].MaxWeight '{stack.layers[0].MaxWeight}'" +
             //    $"- stack.layers[0].Weights[25].WeightIndex '{stack.layers[0].Weights[25].WeightIndex}'");
 
-            for (int i = 0; i < 100; i++)
-            {
-                Console.WriteLine(stack.GetRandomString(random.Next(2, stack.Depth + 1)));
-            }
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    //Console.WriteLine(stack.GetRandomString(random.Next(2, stack.Depth + 1)));
+            //    Console.WriteLine(stack.GetProbableLengthString());
+            //}
 
-            //var textAnalyzer = new TextAnalyzer();
+            var textAnalyzer = new TextAnalyzer();
             //var path = @"C:\Project\CsharpExcercises\randomnamegenerator\randomnamegenerator\";
-            //var path = @"C:\Users\Anton\Source\Repos\randomnamegenerator\randomnamegenerator\";
+            var path = @"C:\Users\Anton\Source\Repos\randomnamegenerator\randomnamegenerator\";
 
-            //textAnalyzer.TrainLetterTreeFromFile(path + "treetest.txt", path + "tree2.bin");
+            var root = textAnalyzer.TrainLetterTreeFromTextFile(path + "treetest.txt", path + "tree3.txt");
             //textAnalyzer.GetChunksFromText(3, Letters.EnglishAlphabet, path + "text.txt", path + "out.txt");
 
             //var root = textAnalyzer.GetTreeFromFile(path + "tree2.bin");
 
-            //Console.WriteLine(root.GetNextRandomCharacter(5));
+            var rnd = new Random();
+            var next = 0;
+
+            for (int i = 0; i < 100; i++)
+            {
+                Console.WriteLine($"{root.GetNextRandomCharacter(next = rnd.Next(3, 20))} - Count: {next}");
+            }
 
             //var nameGenerator = new NameGenerator();
             //var names = new List<string>();
